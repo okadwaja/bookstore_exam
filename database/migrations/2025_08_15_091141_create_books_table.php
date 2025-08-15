@@ -17,6 +17,10 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->timestamps();
+
+            // Index tambahan
+            $table->index('author_id');
+            $table->index('category_id');
             });
     }
 

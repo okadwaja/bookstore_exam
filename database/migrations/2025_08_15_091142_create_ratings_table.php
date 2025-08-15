@@ -16,6 +16,10 @@ return new class extends Migration
             $table->foreignId('book_id')->constrained()->onDelete('cascade');
             $table->unsignedTinyInteger('rating'); // 1-10
             $table->timestamps();
+
+            // Index tambahan
+            $table->index('book_id');
+            $table->index('rating');
         });
     }
 

@@ -12,19 +12,43 @@ class RatingSeeder extends Seeder
     {
         $faker = Faker::create();
         $batchSize = 1000;
-        $total = 500000;
+        $totalBooks = 100000;
+        $targetRatings = 500000;
 
         $ratings = [];
 
-        for ($i = 1; $i <= $total; $i++) {
+        // Step 1: Minimal 5 rating per buku
+        for ($bookId = 1; $bookId <= $totalBooks; $bookId++) {
+            for ($i = 0; $i < 5; $i++) {
+                $ratings[] = [
+                    'book_id' => $bookId,
+                    'rating' => $faker->biasedNumberBetween(3, 9, function ($x) { 
+                        return 1 - abs(5 - $x) / 5;
+                    }),
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ];
+            }
+            if (count($ratings) >= $batchSize) {
+                Rating::insert($ratings);
+                $ratings = [];
+            }
+        }
+
+        // Step 2: Sisa rating acak
+        $alreadyInserted = $totalBooks * 5;
+        $remaining = $targetRatings - $alreadyInserted;
+
+        for ($i = 0; $i < $remaining; $i++) {
             $ratings[] = [
-                'book_id' => rand(1, 100000),
-                'rating' => rand(1, 10),
+                'book_id' => rand(1, $totalBooks),
+                'rating' => $faker->biasedNumberBetween(1, 10, function ($x) { 
+                    return 1 - abs(5 - $x) / 5;
+                }),
                 'created_at' => now(),
                 'updated_at' => now()
             ];
-
-            if ($i % $batchSize === 0) {
+            if (count($ratings) >= $batchSize) {
                 Rating::insert($ratings);
                 $ratings = [];
             }
@@ -34,6 +58,7 @@ class RatingSeeder extends Seeder
             Rating::insert($ratings);
         }
     }
+
 }
 
 
