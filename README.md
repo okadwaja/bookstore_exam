@@ -25,11 +25,11 @@ All data is fully generated from **migrations** and **seeders** according to the
    ```bash
    composer install
 
-3. **Copy '.env' file**
+3. **Copy `.env` file**
    ```bash
    cp .env.example .env
 
-4. **Set up database configuration in '.env'**
+4. **Set up database configuration in `.env`**
    ```bash
     DB_CONNECTION=mysql
     DB_HOST=127.0.0.1
